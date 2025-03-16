@@ -1,0 +1,110 @@
+:root {
+    --primary-bg: #282C35;
+    --secondary-bg: #1C1E24;
+    --form-bg: #3E444A;
+    --primary-border-color: #5A5F66;
+    --secondary-border-color: #32353a;
+    --accent-color: #E67E22;
+    --accent-hover: #D35400;
+    --text-color: #F8F9FA;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+.avatar-body{
+    width: 100vw;
+    min-height: 100vh;
+    background-color: var(--primary-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.avatar-form{
+    margin: 0 20px;
+    width: 400px;
+    background-color: var(--form-bg);
+    border-radius: 1rem;
+    border: 1px solid var(--primary-border-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.avatar-sections{
+    width: 90%;
+}
+
+
+.avatar-title{
+    width: 100%;
+    text-align: center;
+    color: var(--text-color);
+    margin-top: 20px;
+}
+
+.avatar-top-section{
+    width: 100%;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.avatar-top-section img{
+    width: 110px;
+    border-radius: 50%;
+}
+
+.avatar-bottom-section{
+    width: 100%;
+    height: 200px;
+    display: flex;
+    flex-wrap:wrap;
+    justify-content:space-evenly;
+    align-items: center;
+    margin-bottom: 20px;
+    overflow: scroll;   
+}
+
+.avatar-bottom-section img{
+    width: 75px;
+    border-radius: 50%;
+    margin: 10px;
+}
+
+.avatar-bottom-section img:hover{
+    border:3px var(--secondary-border-color) solid;
+    scale: 1.2;
+    transition-delay: 0.2;
+    cursor: pointer;
+}
+
+.avatar-next-button{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.avatar-next-button button{
+    font-size: 20px;
+    background-color: var(--accent-color);
+    color: var(--text-color);
+    border-radius: 0.5rem;
+    border-style: none;
+    outline: none;
+    padding: 8px 15px;
+    margin: 10px;
+}
+
+.avatar-next-button button:hover{
+    background-color: var(--accent-hover);
+    transform: translateY(-3px);
+    transition: 0.2s ease-out;
+}

@@ -11,7 +11,7 @@ const Signup = () => {
       <div className="signup-body">
         <div className="signup-form-section">
           <form className="signup-form" onSubmit={handleSubmitForm}>
-            <h3 className="form-title">Signup</h3>
+            <h3 className="form-title">Sign up</h3>
 
             <div className="form-input">
               <input type="text" id="username" placeholder="Enter your name" />

@@ -11,7 +11,7 @@ const Signin = () => {
       <div className="signin-body">
         <div className="signin-form-section">
           <form className="signin-form" onSubmit={handleSubmitForm}>
-            <h3 className="form-title">Signin</h3>
+            <h3 className="form-title">Sign in</h3>
             <div className="form-input">
               <input type="email" id="email" placeholder="Enter your email" />
             </div>
