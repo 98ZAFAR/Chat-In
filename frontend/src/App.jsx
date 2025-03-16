@@ -1,5 +1,9 @@
+import {Outlet} from 'react-router-dom'
+
 const App = ()=>{
-  return <div>Hello</div>;
+  return <>
+    <Outlet/>
+  </>
 }
 
 export default App;
