@@ -5,6 +5,7 @@ import App from './App.jsx'
 import Signup from './pages/Signup.jsx'
 import Signin from './pages/Signin.jsx'
 import Avatar from './pages/Avatar.jsx'
+import Chat from './pages/Chat.jsx'
 
 const router =  createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router =  createBrowserRouter([
       {
         path:'/avatar',
         element:<Avatar/>
+      },
+      {
+        path:'/chat',
+        element:<Chat/>
       },
     ]
   }

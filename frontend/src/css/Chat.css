@@ -1,0 +1,44 @@
+:root {
+    --primary-bg: #282C35;
+    --secondary-bg: #1C1E24;
+    --title-bg: #1e2028;
+    --form-bg: #3E444A;
+    --border-color: #5A5F66;
+    --accent-color: #E67E22;
+    --accent-hover: #D35400;
+    --text-color: #F8F9FA;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+.sidebar-title{
+    width: 100%;
+    text-align: center;
+    background-color: var(--title-bg);
+    color: var(--text-color);
+    padding: 20px 0;
+}
+
+.chat-body{
+    width: 100%;
+    height: 100vh;
+    background-color: var(--secondary-bg);
+    display: flex;
+}
+
+.chat-sidebar{
+    width:30%;
+    height: 100%;
+    background-color: var(--primary-bg);
+}
+
+.chat-panel{
+    width: 70%;
+    height: 100%;
+    background-color: var(--title-bg);
+}
