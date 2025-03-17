@@ -12,16 +12,33 @@
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
+}
+
+.sidebar-header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--title-bg);
+}
+
+.sidebar-header .setting-icon{
+    scale: 2;
+    margin: 0 0 0 30px;
+    color: var(--text-color);
+}
+
+.sidebar-header .setting-icon:hover{
+    scale: 2.5;
+    cursor: pointer;
+    margin: 0 0 0 30px;
 }
 
 .sidebar-title{
     width: 100%;
-    text-align: center;
-    background-color: var(--title-bg);
+    
     color: var(--text-color);
-    padding: 20px 0;
+    padding: 5% 30%;
 }
 
 .chat-body{
@@ -35,10 +52,73 @@
     width:30%;
     height: 100%;
     background-color: var(--primary-bg);
+    padding: 20px 20px;
 }
+
 
 .chat-panel{
     width: 70%;
     height: 100%;
     background-color: var(--title-bg);
+}
+
+.chat-title{
+    height: 10%;
+    text-align: left;
+    padding-left: 30px;
+    padding-top: 20px;
+    color: var(--text-color);
+    font-size: 20px;
+    display: flex;
+
+}
+.chat-area{
+    margin:0 20px;
+    height: 75%;
+    background-color: var(--border-color);
+    border: 8px solid var(--primary-bg);
+}
+
+.chat-box{
+    height: 15%;
+    margin: 0 20px;
+    padding: 10px 0;
+}
+
+.chat-box input{
+    width: 90%;
+    height: 60px;
+    font-size: 20px;
+    padding: 0 20px;
+    border: none;
+    outline: none;
+}
+.chat-box input:hover{
+    border: 2px solid var(--accent-color);
+}
+
+
+.chat-box button{
+    font-size: 30px;
+    background-color: var(--accent-color);
+    color: var(--text-color);
+    border: none;
+    outline: none;
+    padding: 10px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.chat-box button:hover{
+    background-color: var(--accent-hover);
+}
+
+.chat-title .user-avatar{
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.chat-body input::placeholder{
+    font-size:20px;
 }

@@ -4,7 +4,9 @@ export const ChatContext = createContext({
   defaultAvatars: [],
   selectedtAvatar: "",
   setSelectedAvatar: () => {},
-  contacts:[],
+  contacts: [],
+  selectedContact: {},
+  setSelectedContact: () => {},
 });
 
 const ChatProvider = ({ children }) => {
@@ -41,10 +43,18 @@ const ChatProvider = ({ children }) => {
   ];
 
   const [selectedtAvatar, setSelectedAvatar] = useState(defaultAvatars[0]);
+  const [selectedContact, setSelectedContact] = useState(null);
 
   return (
     <ChatContext.Provider
-      value={{ defaultAvatars, selectedtAvatar, setSelectedAvatar, contacts }}
+      value={{
+        defaultAvatars,
+        selectedtAvatar,
+        setSelectedAvatar,
+        contacts,
+        selectedContact,
+        setSelectedContact,
+      }}
     >
       {children}
     </ChatContext.Provider>
