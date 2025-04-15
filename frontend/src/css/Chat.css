@@ -7,6 +7,7 @@
     --accent-color: #E67E22;
     --accent-hover: #D35400;
     --text-color: #F8F9FA;
+    --chat-color: #c1c5c9;
 }
 
 * {
@@ -77,6 +78,35 @@
     height: 75%;
     background-color: var(--border-color);
     border: 8px solid var(--primary-bg);
+    /* overflow: scroll; */
+}
+
+.message-area-right{
+    width: 100%;
+    display: flex;
+    justify-content: right;
+    font-size: 20px;
+    color: var(--primary-bg);
+    padding: 10px;
+}
+.message-area-left{
+    width: 100%;
+    display: flex;
+    justify-content: left;
+    font-size: 20px;
+    color: var(--primary-bg);
+    padding: 10px;
+}
+
+.message-area-right p{
+    background-color: var(--chat-color);
+    padding: 10px;
+    border-radius: 1rem 0 0 1rem;
+}
+.message-area-left p{
+    background-color: var(--chat-color);
+    padding: 10px;
+    border-radius: 0 1rem 1rem 0;
 }
 
 .chat-box{

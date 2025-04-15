@@ -5,14 +5,14 @@ import { FaCog } from "react-icons/fa";
 import "../css/Chat.css";
 
 const Chat = () => {
-  const { contacts, selectedContact } = useContext(ChatContext);
+  const { contacts, selectedContact, user, messages } = useContext(ChatContext);
 
   return (
     <>
       <div className="chat-body">
         <div className="chat-sidebar">
           <div className="sidebar-header">
-            <FaCog className="setting-icon"/>
+            <FaCog className="setting-icon" />
             <h2 className="sidebar-title">Chat-In</h2>
           </div>
           {contacts.map((contact) => (
@@ -38,7 +38,19 @@ const Chat = () => {
                   {selectedContact ? selectedContact.userName : "Username"}
                 </h3>
               </div>
-              <div className="chat-area"></div>
+              <div className="chat-area">
+                {messages.map((mess) =>
+                  mess.sender == user.email && mess.reciever == selectedContact.email? (
+                    <div key={mess.id} className="message-area-right">
+                      <p>{mess.text}</p>
+                    </div>
+                  ) : mess.sender == selectedContact.email && mess.reciever == user.email?(
+                    <div key={mess.id} className="message-area-left">
+                      <p>{mess.text}</p>
+                    </div>
+                  ) :<></>
+                )}
+              </div>
               <div className="chat-box">
                 <input
                   type="text"
