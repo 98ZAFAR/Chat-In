@@ -42,7 +42,7 @@ const handleLoginUser = async (req, res) => {
         const check = await bcrypt.compare(password, user.password);
         if (check) {
             const token = createToken(user);
-            return res.status(200).json({ message: "Logged In Successfully!", data: { token } });
+            return res.status(200).json({ message: "Logged In Successfully!", data: { token, user } });
         }
         else return res.status(400).json({ error: "Password Doesn't Match!" });
 
@@ -64,7 +64,9 @@ const handleUpdateUser = async(req, res)=>{
             avatarURL:avatarURL||user.avatarURL
         })
         
-        return res.status(201).json({message:"User Credentials Updated Successfully!"});
+        const updatedUser = await User.findOne({email});
+        
+        return res.status(201).json({message:"User Credentials Updated Successfully!", updatedUser});
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: "Server Error!" });
