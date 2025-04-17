@@ -6,12 +6,23 @@ import Signup from './pages/Signup.jsx'
 import Signin from './pages/Signin.jsx'
 import Avatar from './pages/Avatar.jsx'
 import Chat from './pages/Chat.jsx'
+import AddContact from './components/AddContact.jsx'
+import Profile from './pages/Profile.jsx'
+import Homepage from './pages/Homepage.jsx'
 
 const router =  createBrowserRouter([
   {
     path:'/',
     element:<App/>,
     children:[
+      {
+        path:'/',
+        element:<Homepage/>
+      },
+      {
+        path:'/signup',
+        element:<Signup/>
+      },
       {
         path:'/signup',
         element:<Signup/>
@@ -27,6 +38,14 @@ const router =  createBrowserRouter([
       {
         path:'/chat',
         element:<Chat/>
+      },
+      {
+        path:'/add-contact',
+        element:<AddContact/>
+      },
+      {
+        path:'/profile',
+        element:<Profile/>
       },
     ]
   }

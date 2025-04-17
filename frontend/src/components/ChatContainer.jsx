@@ -2,7 +2,7 @@ import { useContext } from "react";
 import "../css/ChatContainer.css";
 import { ChatContext } from "../stores/chatStore";
 
-const ChatContainer = ({ userName, avatarUrl, contact }) => {
+const ChatContainer = ({ userName, avatarURL, contact }) => {
   const { setSelectedContact } = useContext(ChatContext);
   
   const handleSelectContact = (contact) => {
@@ -12,7 +12,7 @@ const ChatContainer = ({ userName, avatarUrl, contact }) => {
     <>
       <div className="chat-container" onClick={()=>handleSelectContact(contact)}>
         <div className="user-avatar">
-          <img src={avatarUrl} alt="" />
+          <img src={avatarURL} alt="" />
         </div>
         <div className="user-name">
           <p>{userName}</p>

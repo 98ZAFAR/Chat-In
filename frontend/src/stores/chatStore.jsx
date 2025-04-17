@@ -1,44 +1,26 @@
-import { createContext, useEffect, useState } from "react";
+import axios from "axios";
+import { createContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const ChatContext = createContext({
   defaultAvatars: [],
   selectedtAvatar: "",
-  setSelectedAvatar: () => {},
+  setSelectedAvatar: () => { },
   contacts: [],
   selectedContact: {},
-  setSelectedContact: () => {},
-  user:{},
-  messages:[],
+  setSelectedContact: () => { },
+  user: {},
+  messages: [],
+  registerUser: () => { },
+  loginUser: () => { },
+  updateAvatar: () => { },
+  token:"",
+  setContacts:()=>{},
+  getMessages:()=>{},
+  setMessages:()=>{},
 });
 
 const ChatProvider = ({ children }) => {
-  const user = {
-    _id: 4,
-    userName: "Mohammad Zafar",
-    email: "zafar@email.com",
-    avatarUrl: "/default_avatar_7.png",
-  }
-  const contacts = [
-    {
-      _id: 1,
-      userName: "Murari Sarkar",
-      email: "murari@email.com",
-      avatarUrl: "/default_avatar_2.png",
-    },
-    {
-      _id: 2,
-      userName: "Satish Singh",
-      email: "saish@email.com",
-      avatarUrl: "/default_avatar_3.png",
-    },
-    {
-      _id: 3,
-      userName: "Aminul Islam",
-      email: "aminul@email.com",
-      avatarUrl: "/default_avatar_6.png",
-    },
-  ];
-
   const defaultAvatars = [
     "/default_avatar_1.png",
     "/default_avatar_2.png",
@@ -50,41 +32,88 @@ const ChatProvider = ({ children }) => {
     "/default_avatar_8.png",
   ];
 
-  const messages = [
-    {
-      id:1,
-      sender:"murari@email.com",
-      reciever:"zafar@email.com",
-      text:"Hello, what are you doing ?"
-    },
-    {
-      id:2,
-      sender:"zafar@email.com",
-      reciever:"murari@email.com",
-      text:"Nothing just chilling."
-    },
-    {
-      id:3,
-      sender:"murari@email.com",
-      reciever:"zafar@email.com",
-      text:"Lets go the gym."
-    },
-    {
-      id:4,
-      sender:"murari@email.com",
-      reciever:"zafar@email.com",
-      text:"We will build our muscles."
-    },
-    {
-      id:5,
-      sender:"zafar@email.com",
-      reciever:"murari@email.com",
-      text:"Naah, I m good here. Prolly next time."
-    },
-  ]
-
   const [selectedtAvatar, setSelectedAvatar] = useState(defaultAvatars[0]);
   const [selectedContact, setSelectedContact] = useState(null);
+  const [token, setToken] = useState(localStorage.getItem('token') ? localStorage.getItem('token') : "");
+  const [contacts, setContacts] = useState([]);
+  const [user, setUser] = useState(localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {});
+  const [messages, setMessages] = useState([]);
+
+  const navigate = useNavigate();
+
+  const registerUser = async (formData) => {
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/api/auth/signup",
+        formData
+      )
+
+      if (res) {
+        console.log(res.data);
+        navigate('/signin');
+      }
+    } catch (error) {
+      alert("Something went wrong!");
+      console.log(error);
+    }
+  }
+
+  const loginUser = async (formData) => {
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/api/auth/signin",
+        formData
+      )
+      if (res) {
+        console.log(res.data);
+        setToken(res.data.data.token);
+        setUser(res.data.data.user);
+        localStorage.setItem('token', res.data.data.token);
+        localStorage.setItem('user', JSON.stringify(res.data.data.user));
+        if(res.data.data.user.avatarURL=="" || res.data.data.user.avatarURL=="#") navigate('/avatar');
+        else navigate('/chat');
+      }
+    } catch (error) {
+      alert("Something went wrong!");
+      console.log(error);
+    }
+  }
+
+  const updateAvatar = async ({ email, avatarURL }) => {
+    try {
+      const res = await axios.put(
+        "http://localhost:3000/api/auth/update",
+        { email, avatarURL }
+      )
+      if (res) {
+        console.log(res.data);
+        setUser(res.data.updatedUser);
+        localStorage.setItem('user', JSON.stringify(res.data.updatedUser));
+        navigate('/chat');
+      }
+    } catch (error) {
+      alert("Something went wrong!");
+      console.log(error);
+    }
+  }
+
+  const getMessages = async(userId, token)=>{
+    try {
+      const res = await axios.get(`http://localhost:3000/api/messages/fetch/${userId}`,{
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if(res){
+        console.log(res.data);
+        setMessages(res.data.data.messages);
+      }
+    } catch (error) {
+      alert("Something went wrong!");
+      console.log(error);
+    }
+  };
 
   return (
     <ChatContext.Provider
@@ -97,6 +126,13 @@ const ChatProvider = ({ children }) => {
         setSelectedContact,
         user,
         messages,
+        registerUser,
+        loginUser,
+        updateAvatar,
+        token,
+        setContacts,
+        getMessages,
+        setMessages,
       }}
     >
       {children}

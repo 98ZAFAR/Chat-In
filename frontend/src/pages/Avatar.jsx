@@ -3,10 +3,14 @@ import "../css/Avatar.css";
 import { ChatContext } from "../stores/chatStore";
 
 const Avatar = () => {
-  const { defaultAvatars, selectedtAvatar, setSelectedAvatar } = useContext(ChatContext);
+  const { defaultAvatars, selectedtAvatar, setSelectedAvatar, updateAvatar, user } = useContext(ChatContext);
 
     const handleSelectAvatar = (event)=>{
         setSelectedAvatar(event.target.id);
+    }
+
+    const handleSubmit = (event)=>{
+      updateAvatar({email:user.email, avatarURL:selectedtAvatar});
     }
 
   return (
@@ -31,7 +35,7 @@ const Avatar = () => {
               ))}
             </div>
             <div className="avatar-next-button">
-                <button>Next</button>
+                <button onClick={handleSubmit}>Next</button>
             </div>
           </div>
         </div>

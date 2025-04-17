@@ -1,0 +1,94 @@
+:root {
+    --primary-bg: #282C35;
+    --secondary-bg: #1C1E24;
+    --title-bg: #1e2028;
+    --form-bg: #3E444A;
+    --border-color: #5A5F66;
+    --accent-color: #E67E22;
+    --accent-hover: #D35400;
+    --text-color: #F8F9FA;
+    --chat-color: #c1c5c9;
+  }
+  
+  .add-contact-page {
+    background-color: var(--primary-bg);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+  }
+  
+  .add-contact-form {
+    background: linear-gradient(145deg, var(--form-bg), var(--secondary-bg));
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 32px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    transition: transform 0.3s ease;
+  }
+  
+  .add-contact-form:hover {
+    transform: translateY(-2px);
+  }
+  
+  .add-contact-form h2 {
+    color: var(--text-color);
+    font-size: 1.8rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  .add-contact-form input {
+    padding: 12px 14px;
+    background-color: var(--secondary-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    color: var(--text-color);
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
+  }
+  
+  .add-contact-form input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+  }
+  
+  .add-contact-form button {
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.25s ease, transform 0.2s ease;
+  }
+  
+  .add-contact-form button[type="button"] {
+    background-color: var(--accent-color);
+    color: var(--text-color);
+  }
+  
+  .add-contact-form button[type="button"]:hover {
+    background-color: var(--accent-hover);
+    transform: translateY(-1px);
+  }
+  
+  .cancel-button {
+    background-color: transparent;
+    color: var(--chat-color);
+    border: 1px solid var(--border-color);
+    margin-top: -8px;
+  }
+  
+  .cancel-button:hover {
+    background-color: var(--secondary-bg);
+    transform: translateY(-1px);
+  }
+  

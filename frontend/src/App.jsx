@@ -1,5 +1,4 @@
-import { useContext } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet} from "react-router-dom";
 import ChatProvider from "./stores/chatStore";
 
 const App = () => {
