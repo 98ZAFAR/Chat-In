@@ -9,13 +9,7 @@ import "../css/Chat.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-import { io } from 'socket.io-client';
-
-const socket = io('https://chatin-ln9h.onrender.com', {
-  auth: {
-    token: localStorage.getItem('token')
-  }
-});
+import socket from "../utils/Socket";
 
 socket.on('connect', () => {
   console.log('Connected to socket server');
@@ -25,10 +19,9 @@ const Chat = () => {
   const { contacts, selectedContact, user, messages, token, setContacts, getMessages, setMessages } = useContext(ChatContext);
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
-  // console.log("Original Messages : ", messages);
+  
   const bottomRef = useRef(null);
   
-
   useEffect(() => {
     if (!token) return navigate('/signin');
 
@@ -73,7 +66,7 @@ const Chat = () => {
   };
 
   useEffect(() => {
-    socket.on('recieve_message', (msg) => {
+    const handleMessage = (msg) => {
       console.log('New message:', msg);
       setMessages((prevMessages) => [
         ...prevMessages,
@@ -84,12 +77,15 @@ const Chat = () => {
           content: msg.content,
         }
       ]);
-      return () => {
-        socket.off('recieve_message');
-      };
-    });
-
-  }, [socket]);
+    };
+  
+    socket.on('recieve_message', handleMessage);
+  
+    return () => {
+      socket.off('recieve_message', handleMessage);
+    };
+  }, []);
+  
 
   useEffect(() => {
     if (bottomRef.current) {
