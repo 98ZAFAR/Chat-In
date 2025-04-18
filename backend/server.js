@@ -32,9 +32,6 @@ app.use('/api/auth/', userRoute);
 app.use('/api/contacts/', ValidateUser, contactRoute);
 app.use('/api/messages/', ValidateUser, messageRoute);
 
-app.get('/', (req, res)=>{
-    return res.status(200).json({message:"Homepage"});
-})
 
 //--------SOCKET IMPLEMENTATION---------//
 const server = http.createServer(app);
@@ -92,8 +89,6 @@ io.on("connection", (socket)=>{
     });
 });
 
-app.listen(PORT, ()=>{
+server.listen(PORT, ()=>{
     console.log("Server is runnig on port "+PORT);
 })
-
-server.listen(3001);
