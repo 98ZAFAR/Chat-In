@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:3001', {
+const socket = io('https://chatin-ln9h.onrender.com', {
   auth: {
     token: localStorage.getItem('token')
   }
@@ -34,7 +34,7 @@ const Chat = () => {
 
     const fetchAllContacts = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/api/contacts/fetch/${user._id}`,
+        const res = await axios.get(`https://chatin-ln9h.onrender.com/api/contacts/fetch/${user._id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`
