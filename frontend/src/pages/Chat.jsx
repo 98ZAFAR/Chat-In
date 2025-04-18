@@ -84,7 +84,7 @@ const Chat = () => {
     return () => {
       socket.off('recieve_message', handleMessage);
     };
-  }, []);
+  }, [socket]);
   
 
   useEffect(() => {
