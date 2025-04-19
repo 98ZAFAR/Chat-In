@@ -1,92 +1,75 @@
 :root {
-    --primary-bg: #282C35;
-    --secondary-bg: #1C1E24;
-    --title-bg: #1e2028;
-    --form-bg: #3E444A;
-    --border-color: #5A5F66;
-    --accent-color: #E67E22;
-    --accent-hover: #D35400;
-    --text-color: #F8F9FA;
-    --chat-color: #c1c5c9;
-  }
-  
-  .profile-page {
-    background-color: var(--primary-bg);
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .profile-card {
-    background-color: var(--form-bg);
-    padding: 40px;
-    border-radius: 14px;
-    width: 350px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-    text-align: center;
-  }
-  
-  .profile-card h2 {
-    color: var(--text-color);
-    margin-bottom: 20px;
-  }
-  
-  .profile-avatar {
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    border: 2px solid var(--border-color);
-    margin-bottom: 20px;
-  }
-  
-  .profile-card input {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    background-color: var(--secondary-bg);
-    color: var(--text-color);
-    font-size: 1rem;
-  }
-  
-  .profile-card button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 10px;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  
-  .update-btn {
-    background-color: var(--accent-color);
-    color: white;
-    border: none;
-  }
-  
-  .update-btn:hover {
-    background-color: var(--accent-hover);
-  }
-  
-  .logout-btn {
-    background-color: transparent;
-    color: var(--text-color);
-    border: 1px solid var(--border-color);
-  }
-  
-  .logout-btn:hover {
-    background-color: var(--secondary-bg);
-  }
-  
-  .back-btn {
-    background-color: var(--border-color);
-    color: var(--text-color);
-    border: none;
-  }
-  
-  .back-btn:hover {
-    background-color: var(--title-bg);
-  }  
+  --primary-bg: #282C35;
+  --secondary-bg: #1C1E24;
+  --title-bg: #1e2028;
+  --form-bg: #3E444A;
+  --border-color: #5A5F66;
+  --accent-color: #E67E22;
+  --accent-hover: #D35400;
+  --text-color: #F8F9FA;
+  --chat-color: #c1c5c9;
+}
+
+.profile-page {
+  background-color: var(--primary-bg);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-card {
+  background-color: var(--form-bg);
+  padding: 40px 30px;
+  border-radius: 14px;
+  width: 320px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+.profile-card h2 {
+  color: var(--text-color);
+  margin-bottom: 30px;
+  font-size: 1.5rem;
+}
+
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
+  margin-bottom: 20px;
+}
+
+.profile-card button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-size: 1rem;
+}
+
+/* Logout Button */
+.logout-btn {
+  background-color: transparent;
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+}
+
+.logout-btn:hover {
+  background-color: var(--secondary-bg);
+}
+
+/* Back Button */
+.back-btn {
+  background-color: var(--border-color);
+  color: var(--text-color);
+  border: none;
+}
+
+.back-btn:hover {
+  background-color: var(--title-bg);
+}

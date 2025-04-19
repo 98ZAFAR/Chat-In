@@ -4,34 +4,50 @@ import { ChatContext } from "../stores/chatStore";
 import { FaCog } from "react-icons/fa";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { LuSendHorizontal } from "react-icons/lu";
+const API_URL = import.meta.env.VITE_API_URL;
 
 import "../css/Chat.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-import socket from "../utils/Socket";
-
-socket.on('connect', () => {
-  console.log('Connected to socket server');
-});
+import { initializeSocket, getSocket } from "../utils/Socket";
+let socket = null;
 
 const Chat = () => {
-  const { contacts, selectedContact, user, messages, token, setContacts, getMessages, setMessages } = useContext(ChatContext);
-  const [message, setMessage] = useState("");
+  const {
+    contacts,
+    selectedContact,
+    user,
+    messages,
+    token,
+    setContacts,
+    getMessages,
+    setMessages,
+    setSelectedContact,
+  } = useContext(ChatContext);
+
+  const message = useRef(null);
   const navigate = useNavigate();
-  
+
   const bottomRef = useRef(null);
-  
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!selectedContact || !message.current.value.trim()) return;
+    sendMessage(selectedContact.contactId, message.current.value);
+  };
+
   useEffect(() => {
-    if (!token) return navigate('/signin');
+    if (!token) return navigate("/signin");
 
     const fetchAllContacts = async () => {
       try {
-        const res = await axios.get(`https://chatin-ln9h.onrender.com/api/contacts/fetch/${user._id}`,
+        const res = await axios.get(
+          `${API_URL}/api/contacts/fetch/${user._id}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`
-            }
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
 
@@ -43,49 +59,66 @@ const Chat = () => {
         alert("Something went wrong!");
         console.log(error);
       }
-    }
+    };
     fetchAllContacts();
     getMessages(user._id, token);
+  }, [token]);
 
-  }, [token])
+  useEffect(() => {
+    setMessages([]);
+    setSelectedContact(null);
+  }, [user]);
 
   const sendMessage = (toUserId, messageText) => {
-    socket.emit('send_message', {
+    socket.emit("send_message", {
       to: toUserId,
-      content: messageText
+      content: messageText,
     });
 
-    const newMessages = [...messages, {
-      _id: `${Date.now()}`,
-      sender: user._id,
-      reciever: toUserId,
-      content: messageText,
-    }];
+    const newMessages = [
+      ...messages,
+      {
+        _id: `${Date.now()}`,
+        sender: user._id,
+        reciever: toUserId,
+        content: messageText,
+      },
+    ];
 
     setMessages(newMessages);
+    message.current.value = "";
   };
 
   useEffect(() => {
+    if (!token) return;
+
+    socket = initializeSocket(token);
+
+    return () => {
+      if (socket) socket.disconnect();
+    };
+  }, [token]);
+
+  useEffect(() => {
     const handleMessage = (msg) => {
-      console.log('New message:', msg);
+      console.log("New message:", msg);
       setMessages((prevMessages) => [
         ...prevMessages,
         {
-          _id: `${Date.now()+prevMessages.length}`,
+          _id: `${Date.now() + prevMessages.length}`,
           sender: msg.from,
           reciever: user._id,
           content: msg.content,
-        }
+        },
       ]);
     };
-  
-    socket.on('recieve_message', handleMessage);
-  
+
+    socket.on("recieve_message", handleMessage);
+
     return () => {
-      socket.off('recieve_message', handleMessage);
+      socket.off("recieve_message", handleMessage);
     };
   }, [socket]);
-  
 
   useEffect(() => {
     if (bottomRef.current) {
@@ -98,7 +131,10 @@ const Chat = () => {
       <div className="chat-body">
         <div className="chat-sidebar">
           <div className="sidebar-header">
-            <FaCog className="setting-icon" onClick={() => navigate('/profile')} />
+            <FaCog
+              className="setting-icon"
+              onClick={() => navigate("/profile")}
+            />
             <h2 className="sidebar-title">Chat-In</h2>
           </div>
           {contacts.map((contact) => (
@@ -110,7 +146,10 @@ const Chat = () => {
               contact={contact}
             />
           ))}
-          <IoMdAddCircleOutline className="chat-add-contact" onClick={() => navigate('/add-contact')} />
+          <IoMdAddCircleOutline
+            className="chat-add-contact"
+            onClick={() => navigate("/add-contact")}
+          />
         </div>
 
         {selectedContact && (
@@ -128,27 +167,40 @@ const Chat = () => {
               </div>
               <div className="chat-area">
                 {messages.map((mess) =>
-                  mess.sender == user._id && mess.reciever == selectedContact.contactId ? (
+                  mess.sender == user._id &&
+                    mess.reciever == selectedContact.contactId ? (
                     <div key={mess._id} className="message-area-right">
                       <p>{mess.content}</p>
                     </div>
-                  ) : mess.sender == selectedContact.contactId && mess.reciever == user._id && (
-                    <div key={mess._id} className="message-area-left">
-                      <p>{mess.content}</p>
-                    </div>
+                  ) : (
+                    mess.sender == selectedContact.contactId &&
+                    mess.reciever == user._id && (
+                      <div key={mess._id} className="message-area-left">
+                        <p>{mess.content}</p>
+                      </div>
+                    )
                   )
                 )}
                 <div ref={bottomRef} />
               </div>
-              <div className="chat-box">
+              <form className="chat-box" onSubmit={handleSubmit}>
                 <input
                   type="text"
                   id="message-box"
+                  name="message"
+                  ref={message}
                   placeholder="Enter the message"
-                  onChange={(e) => { setMessage(e.target.value) }}
                 />
-                <LuSendHorizontal className="send-button" onClick={() => sendMessage(selectedContact.contactId, message)} />
-              </div>
+                <LuSendHorizontal
+                  className="send-button"
+                  onClick={() =>
+                    sendMessage(
+                      selectedContact.contactId,
+                      message.current.value
+                    )
+                  }
+                />
+              </form>
             </div>
           </>
         )}

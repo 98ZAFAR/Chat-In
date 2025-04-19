@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ChatContext } from "../stores/chatStore";
 import axios from "axios";
 import "../css/AddContact.css";
+const API_URL = import.meta.env.VITE_API_URL;
 
 const AddContact = () => {
   const [email, setEmail] = useState("");
@@ -13,7 +14,7 @@ const AddContact = () => {
     if (!email) return alert("Please enter an email");
 
     try {
-      const res = await axios.post(`https://chatin-ln9h.onrender.com/api/contacts/create`, {
+      const res = await axios.post(`${API_URL}/api/contacts/create`, {
         email,
       }, {
         headers: {

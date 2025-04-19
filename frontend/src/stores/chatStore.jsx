@@ -1,6 +1,7 @@
 import axios from "axios";
 import { createContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const ChatContext = createContext({
   defaultAvatars: [],
@@ -44,7 +45,7 @@ const ChatProvider = ({ children }) => {
   const registerUser = async (formData) => {
     try {
       const res = await axios.post(
-        "https://chatin-ln9h.onrender.com/api/auth/signup",
+        `${API_URL}/api/auth/signup`,
         formData
       )
 
@@ -61,7 +62,7 @@ const ChatProvider = ({ children }) => {
   const loginUser = async (formData) => {
     try {
       const res = await axios.post(
-        "https://chatin-ln9h.onrender.com/api/auth/signin",
+        `${API_URL}/api/auth/signin`,
         formData
       )
       if (res) {
@@ -82,7 +83,7 @@ const ChatProvider = ({ children }) => {
   const updateAvatar = async ({ email, avatarURL }) => {
     try {
       const res = await axios.put(
-        "https://chatin-ln9h.onrender.com/api/auth/update",
+        `${API_URL}/api/auth/update`,
         { email, avatarURL }
       )
       if (res) {
@@ -99,7 +100,7 @@ const ChatProvider = ({ children }) => {
 
   const getMessages = async(userId, token)=>{
     try {
-      const res = await axios.get(`https://chatin-ln9h.onrender.com/api/messages/fetch/${userId}`,{
+      const res = await axios.get(`${API_URL}/api/messages/fetch/${userId}`,{
         headers: {
           Authorization: `Bearer ${token}`
         }
