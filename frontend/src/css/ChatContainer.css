@@ -40,3 +40,18 @@
     font-size: 20px;
     color: var(--text-color);
 }
+
+@media screen and (max-width: 768px){
+    .chat-container{
+        height: 60px;
+        padding-left: 15px;
+    }
+
+    .chat-container .user-avatar img{
+        width: 40px;
+    }
+
+    .chat-container .user-name{
+        font-size: 18px;
+    }
+}
