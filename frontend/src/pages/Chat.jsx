@@ -33,7 +33,6 @@ import { showError, showInfo } from "../utils/toast";
 
 const API_URL = import.meta.env.VITE_API_URL;
 let socket = null;
-let typingTimeout = null;
 
 const Chat = () => {
   const {
@@ -61,10 +60,12 @@ const Chat = () => {
   const [unreadCounts, setUnreadCounts] = useState(new Map());
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [contactToDelete, setContactToDelete] = useState(null);
+  const [isLoadingConversation, setIsLoadingConversation] = useState(false);
 
   const messageRef = useRef(null);
   const bottomRef = useRef(null);
   const chatAreaRef = useRef(null);
+  const typingTimeoutRef = useRef(null);
 
   const navigate = useNavigate();
   const { search } = useLocation();
@@ -92,20 +93,24 @@ const Chat = () => {
   const handleMessageInput = (e) => {
     if (!selectedContact) return;
 
+    console.log("Typing input detected for contact:", selectedContact.contactId);
+
     // Clear previous typing timeout
-    if (typingTimeout) {
-      clearTimeout(typingTimeout);
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
     }
 
     // Start typing indicator
     if (!isTyping) {
       setIsTyping(true);
+      console.log("Starting typing indicator for:", selectedContact.contactId);
       startTyping(selectedContact.contactId);
     }
 
     // Set new timeout to stop typing
-    typingTimeout = setTimeout(() => {
+    typingTimeoutRef.current = setTimeout(() => {
       setIsTyping(false);
+      console.log("Stopping typing indicator for:", selectedContact.contactId);
       stopTyping(selectedContact.contactId);
     }, 1000);
   };
@@ -121,6 +126,7 @@ const Chat = () => {
     console.log("Loading conversation for contact:", contact);
     if (!contact) return;
 
+    setIsLoadingConversation(true);
     try {
       const conversationData = await getConversation(contact.contactId);
       console.log("Conversation data fetched:", conversationData);
@@ -138,6 +144,8 @@ const Chat = () => {
     } catch (error) {
       console.error("Error loading conversation:", error);
       setCurrentMessages([]);
+    } finally {
+      setIsLoadingConversation(false);
     }
   };
 
@@ -264,13 +272,17 @@ const Chat = () => {
 
     const handleTyping = (data) => {
       const { userId, isTyping } = data;
+      console.log("Received typing event:", { userId, isTyping });
       setTypingUsers((prev) => {
         const newSet = new Set(prev);
         if (isTyping) {
           newSet.add(userId);
+          console.log("Added user to typing:", userId);
         } else {
           newSet.delete(userId);
+          console.log("Removed user from typing:", userId);
         }
+        console.log("Current typing users:", Array.from(newSet));
         return newSet;
       });
     };
@@ -333,21 +345,27 @@ const Chat = () => {
       loadConversation(selectedContact);
     } else {
       setCurrentMessages([]);
+      setIsLoadingConversation(false);
     }
   }, [selectedContact]);
 
-  // Auto-scroll to bottom when new messages arrive
+  // Auto-scroll to bottom when new messages arrive or when loading completes
   useEffect(() => {
-    if (bottomRef.current) {
-      bottomRef.current.scrollIntoView({ behavior: "smooth" });
+    if (bottomRef.current && !isLoadingConversation) {
+      // Use setTimeout to ensure DOM has updated
+      setTimeout(() => {
+        if (bottomRef.current) {
+          bottomRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
     }
-  }, [currentMessages]);
+  }, [currentMessages, isLoadingConversation]);
 
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      if (typingTimeout) {
-        clearTimeout(typingTimeout);
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
       }
     };
   }, []);
@@ -420,30 +438,37 @@ const Chat = () => {
           </div>
 
           <div className="chat-area" ref={chatAreaRef}>
-            {currentMessages.map((message) => {
-              const isOwnMessage = message.sender._id === user._id;
-              return (
-                <div
-                  key={message._id}
-                  className={
-                    isOwnMessage ? "message-area-right" : "message-area-left"
-                  }
-                >
-                  <div className="message-content">
-                    <p>{message.content}</p>
-                    <span className="message-time">
-                      {new Date(message.createdAt).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                      {isOwnMessage && message.isRead && (
-                        <span className="message-read"><FaCheckDouble/></span>
-                      )}
+            {isLoadingConversation ? (
+              <div className="loading-conversation">
+                <div className="loading-spinner"></div>
+                <p>Loading conversation...</p>
+              </div>
+            ) : (
+              currentMessages.map((message) => {
+                const isOwnMessage = message.sender._id === user._id;
+                return (
+                  <div
+                    key={message._id}
+                    className={
+                      isOwnMessage ? "message-area-right" : "message-area-left"
+                    }
+                  >
+                    <div className="message-content">
+                      <p>{message.content}</p>
+                      <span className="message-time">
+                        {new Date(message.createdAt).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                        {isOwnMessage && message.isRead && (
+                          <span className="message-read"><FaCheckDouble/></span>
+                        )}
                     </span>
                   </div>
                 </div>
               );
-            })}
+              })
+            )}
 
             {/* Typing indicator */}
             {selectedContact && typingUsers.has(selectedContact.contactId) && (
