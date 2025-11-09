@@ -51,14 +51,14 @@ const createRateLimiter = (options = {}) => {
 
 // Predefined rate limiters
 const authLimiter = createRateLimiter({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 50, // 5 attempts per 15 minutes for auth endpoints
+    windowMs: 1 * 60 * 1000, // 1 minute
+    max: 5, // 5 attempts per 1 minute for auth endpoints
     message: "Too many authentication attempts, please try again later."
 });
 
 const generalLimiter = createRateLimiter({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 1000, // 1000 requests per 15 minutes for general endpoints
+    windowMs: 1 * 60 * 1000, // 1 minutes
+    max: 100, // 100 requests per 1 minutes for general endpoints
     message: "Too many requests, please try again later."
 });
 
