@@ -6,15 +6,29 @@ const MessageSchema = new mongoose.Schema({
         ref:'user',
         required:true
     },
-    reciever:{
+    receiver:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'user',
         required:true
     },
     content:{
         type:String,
-        required:true
+        required:true,
+        trim:true,
+        maxLength:1000
     },
+    messageType:{
+        type:String,
+        enum:['text', 'image', 'file'],
+        default:'text'
+    },
+    isRead:{
+        type:Boolean,
+        default:false
+    },
+    readAt:{
+        type:Date
+    }
 }, {timestamps:true});
 
 const Message = mongoose.model('message', MessageSchema);
