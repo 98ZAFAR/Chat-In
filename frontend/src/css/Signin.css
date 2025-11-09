@@ -119,6 +119,68 @@
     box-shadow: 0 4px 10px rgba(211, 84, 0, 0.5);
 }
 
+/* Divider */
+.divider {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border-color);
+}
+
+.divider span {
+    padding: 0 15px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Google Login Button */
+.google-login-button {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.google-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 20px;
+    background: white;
+    color: #333;
+    border: 2px solid #dadce0;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.google-btn:hover {
+    background: #f8f9fa;
+    border-color: #dadce0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+}
+
+.google-btn img {
+    width: 20px;
+    height: 20px;
+}
+
 @media (max-width: 1024px) {
     .signin-body {
         flex-direction: column;

@@ -26,6 +26,8 @@ import {
   offUserOnline,
   onOnlineUsersList,
   offOnlineUsersList,
+  onMessageRead,
+  offMessageRead,
 } from "../utils/Socket";
 import { showError, showInfo } from "../utils/toast";
 
@@ -47,10 +49,10 @@ const Chat = () => {
     setSelectedContact,
     setToken,
     setUser,
+    deleteContact,
   } = useContext(ChatContext);
 
-  console.log("Messaeges in Chat component:", messages);
-
+  console.log("User in Chat.jsx:", user);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [currentMessages, setCurrentMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
@@ -165,7 +167,7 @@ const Chat = () => {
       }
 
       // Check if user is authenticated
-      if (!token || !user?._id) {
+      if (!token) {
         navigate("/signin");
         return;
       }
@@ -272,11 +274,27 @@ const Chat = () => {
       setOnlineUsers(new Set(userIds));
     };
 
+    const handleMessageRead = (data) => {
+      const { messageIds, readBy } = data;
+      
+      // Update messages in current conversation to show as read
+      if (selectedContact && readBy === selectedContact.contactId) {
+        setCurrentMessages((prev) => 
+          prev.map((message) => 
+            messageIds.includes(message._id) 
+              ? { ...message, isRead: true }
+              : message
+          )
+        );
+      }
+    };
+
     onMessage(handleMessage);
     onMessageSent(handleMessageSent);
     onUserTyping(handleTyping);
     onUserOnline(handleUserOnline);
     onOnlineUsersList(handleOnlineUsersList);
+    onMessageRead(handleMessageRead);
 
     return () => {
       offMessage(handleMessage);
@@ -284,6 +302,7 @@ const Chat = () => {
       offUserTyping(handleTyping);
       offUserOnline(handleUserOnline);
       offOnlineUsersList(handleOnlineUsersList);
+      offMessageRead(handleMessageRead);
       disconnectSocket();
     };
   }, [token, user?._id, selectedContact?.contactId]);
@@ -339,6 +358,7 @@ const Chat = () => {
             unreadCount={unreadCounts.get(contact.contactId) || 0}
             isSelected={selectedContact?._id === contact._id}
             onSelect={setSelectedContact}
+            onDelete={deleteContact}
           />
         ))}
 

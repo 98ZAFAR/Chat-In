@@ -1,7 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../css/Signin.css";
 import { ChatContext } from "../stores/chatStore";
 import { useContext, useState } from "react";
+import { useEffect } from "react";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 const Signin = () => {
   const { loginUser } = useContext(ChatContext);
@@ -9,6 +12,9 @@ const Signin = () => {
     email: "",
     password: "",
   });
+
+  const { token } = useContext(ChatContext);
+  const navigate = useNavigate();
 
   const handleSubmitForm = (event) => {
     event.preventDefault();
@@ -18,6 +24,16 @@ const Signin = () => {
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
+
+  const handleGoogleLogin = () => {
+    window.location.href = `${API_URL}/auth/google`;
+  };
+
+  useEffect(() => {
+    if (token) {
+      navigate('/chat');
+    }
+  }, [token, navigate]);
 
   return (
     <>
@@ -43,6 +59,15 @@ const Signin = () => {
             </div>
             <div className="submit-button">
               <button type="submit">Login</button>
+            </div>
+            <div className="divider">
+              <span>OR</span>
+            </div>
+            <div className="google-login-button">
+              <button type="button" className="google-btn" onClick={handleGoogleLogin}>
+                <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" />
+                Login with Google
+              </button>
             </div>
           </form>
         </div>

@@ -8,6 +8,7 @@ const Profile = () => {
   const { user, updateProfile, logoutUser, loading, defaultAvatars } = useContext(ChatContext);
   const [isEditing, setIsEditing] = useState(false);
   const [showAvatarSelector, setShowAvatarSelector] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [formData, setFormData] = useState({
     username: user?.username || '',
     bio: user?.bio || '',
@@ -68,9 +69,16 @@ const Profile = () => {
   };
 
   const handleLogout = async () => {
-    if (window.confirm('Are you sure you want to logout?')) {
-      await logoutUser();
-    }
+    setShowLogoutConfirm(true);
+  };
+
+  const confirmLogout = async () => {
+    setShowLogoutConfirm(false);
+    await logoutUser();
+  };
+
+  const cancelLogout = () => {
+    setShowLogoutConfirm(false);
   };
 
   if (!user?._id) {
@@ -223,6 +231,30 @@ const Profile = () => {
           )}
         </div>
       </div>
+
+      {/* Logout Confirmation Modal */}
+      {showLogoutConfirm && (
+        <div className="modal-overlay">
+          <div className="confirmation-modal">
+            <h3>Confirm Logout</h3>
+            <p>Are you sure you want to logout?</p>
+            <div className="modal-actions">
+              <button 
+                className="confirm-btn"
+                onClick={confirmLogout}
+              >
+                Yes, Logout
+              </button>
+              <button 
+                className="cancel-btn"
+                onClick={cancelLogout}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

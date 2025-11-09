@@ -70,8 +70,14 @@ const Signup = () => {
             <div className="submit-button">
               <button type="submit">Register</button>
             </div>
-            <div className="submit-button">
-              <button onClick={handleGoogleLogin}>Login with google</button>
+            <div className="divider">
+              <span>OR</span>
+            </div>
+            <div className="google-login-button">
+              <button type="button" className="google-btn" onClick={handleGoogleLogin}>
+                <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" />
+                Sign up with Google
+              </button>
             </div>
           </form>
         </div>

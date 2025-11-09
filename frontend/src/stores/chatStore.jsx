@@ -366,11 +366,22 @@ const ChatProvider = ({ children }) => {
 
   const markMessagesAsRead = async (contactId) => {
     try {
-      await axios.put(
+      const response = await axios.put(
         `${API_URL}/api/messages/mark-read/${contactId}`,
         {},
         getAuthHeaders()
       );
+      
+      // Emit socket event for instant read receipts
+      if (response.data.messageIds && response.data.messageIds.length > 0) {
+        const socket = window.socket; // Assuming socket is available globally
+        if (socket) {
+          socket.emit('messages_read', {
+            messageIds: response.data.messageIds,
+            contactId
+          });
+        }
+      }
       
     } catch (error) {
       console.error("Failed to mark messages as read:", error);
