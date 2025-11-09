@@ -4,6 +4,8 @@ import { useContext, useState } from "react";
 import axios from "axios";
 import { ChatContext } from "../stores/chatStore";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const Signup = () => {
   const {registerUser} = useContext(ChatContext);
   const [formData, setFormData] = useState({
@@ -20,6 +22,10 @@ const Signup = () => {
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
+
+  const handleGoogleLogin = ()=>{
+    window.location.href = `${API_URL}/auth/google`
+  }
 
   return (
     <>
@@ -63,6 +69,9 @@ const Signup = () => {
             </div>
             <div className="submit-button">
               <button type="submit">Register</button>
+            </div>
+            <div className="submit-button">
+              <button onClick={handleGoogleLogin}>Login with google</button>
             </div>
           </form>
         </div>

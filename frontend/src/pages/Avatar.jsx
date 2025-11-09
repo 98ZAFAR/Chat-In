@@ -1,17 +1,55 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import "../css/Avatar.css";
 import { ChatContext } from "../stores/chatStore";
+import { showError } from "../utils/toast";
+import { useNavigate } from "react-router-dom";
 
 const Avatar = () => {
-  const { defaultAvatars, selectedtAvatar, setSelectedAvatar, updateAvatar, user } = useContext(ChatContext);
+  const { 
+    defaultAvatars, 
+    selectedtAvatar, 
+    setSelectedAvatar, 
+    updateAvatar, 
+    user,
+    loading,
+    token 
+  } = useContext(ChatContext);
+  
+  const navigate = useNavigate();
 
-    const handleSelectAvatar = (event)=>{
-        setSelectedAvatar(event.target.id);
+  useEffect(() => {
+    // Redirect if not authenticated
+    if (!token || !user?._id) {
+      navigate('/signin');
+      return;
     }
 
-    const handleSubmit = (event)=>{
-      updateAvatar({email:user.email, avatarURL:selectedtAvatar});
+    // If user already has an avatar, redirect to chat
+    if (user.avatarURL && user.avatarURL !== "#" && user.avatarURL !== "") {
+      navigate('/chat');
     }
+  }, [token, user, navigate]);
+
+  const handleSelectAvatar = (event) => {
+    setSelectedAvatar(event.target.id);
+  };
+
+  const handleSubmit = async () => {
+    if (!selectedtAvatar) {
+      showError("Please select an avatar!");
+      return;
+    }
+
+    try {
+      await updateAvatar({ avatarURL: selectedtAvatar });
+    } catch (error) {
+      console.error('Avatar update error:', error);
+    }
+  };
+
+  const handleSkip = () => {
+    navigate('/chat');
+  };
 
   return (
     <>
@@ -34,8 +72,21 @@ const Avatar = () => {
                 />
               ))}
             </div>
-            <div className="avatar-next-button">
-                <button onClick={handleSubmit}>Next</button>
+            <div className="avatar-actions">
+              <button 
+                onClick={handleSubmit} 
+                disabled={loading || !selectedtAvatar}
+                className={`next-button ${loading ? 'loading' : ''}`}
+              >
+                {loading ? 'Setting Avatar...' : 'Continue'}
+              </button>
+              <button 
+                onClick={handleSkip} 
+                className="skip-button"
+                disabled={loading}
+              >
+                Skip for now
+              </button>
             </div>
           </div>
         </div>
