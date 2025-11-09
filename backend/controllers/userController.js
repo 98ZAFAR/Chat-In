@@ -145,7 +145,7 @@ const handleLoginUser = async (req, res) => {
 
         const token = createToken(user);
         const userResponse = {
-            id: user._id,
+            _id: user._id,
             username: user.username,
             email: user.email,
             avatarURL: user.avatarURL,
