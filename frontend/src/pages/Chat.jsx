@@ -59,6 +59,8 @@ const Chat = () => {
   const [typingUsers, setTypingUsers] = useState(new Set());
   const [onlineUsers, setOnlineUsers] = useState(new Set());
   const [unreadCounts, setUnreadCounts] = useState(new Map());
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [contactToDelete, setContactToDelete] = useState(null);
 
   const messageRef = useRef(null);
   const bottomRef = useRef(null);
@@ -137,6 +139,24 @@ const Chat = () => {
       console.error("Error loading conversation:", error);
       setCurrentMessages([]);
     }
+  };
+
+  const handleDeleteContactRequest = (contactId, contactName) => {
+    setContactToDelete({ id: contactId, name: contactName });
+    setShowDeleteConfirm(true);
+  };
+
+  const confirmDeleteContact = async () => {
+    if (contactToDelete) {
+      await deleteContact(contactToDelete.id);
+      setShowDeleteConfirm(false);
+      setContactToDelete(null);
+    }
+  };
+
+  const cancelDeleteContact = () => {
+    setShowDeleteConfirm(false);
+    setContactToDelete(null);
   };
 
   useEffect(() => {
@@ -358,7 +378,7 @@ const Chat = () => {
             unreadCount={unreadCounts.get(contact.contactId) || 0}
             isSelected={selectedContact?._id === contact._id}
             onSelect={setSelectedContact}
-            onDelete={deleteContact}
+            onDelete={handleDeleteContactRequest}
           />
         ))}
 
@@ -471,6 +491,32 @@ const Chat = () => {
       ) : (
         <div className="select-contact-message">
           <p>Select A Contact To Chat</p>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteConfirm && (
+        <div className="delete-confirm-modal-overlay">
+          <div className="delete-confirm-modal">
+            <div className="delete-confirm-content">
+              <h3>Delete Contact</h3>
+              <p>Are you sure you want to delete <strong>{contactToDelete?.name}</strong> from your contacts?</p>
+              <div className="delete-confirm-actions">
+                <button 
+                  className="confirm-delete-btn" 
+                  onClick={confirmDeleteContact}
+                >
+                  Delete
+                </button>
+                <button 
+                  className="cancel-delete-btn" 
+                  onClick={cancelDeleteContact}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
